@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+	<head>
+	    <title>TicTacToe</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="main.css">
+	</head>
+	<body class="">
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- Main -->
+					<div id="main">
+						<section id="intro" class="main" style="padding-top:10px">
+							<p id="results"></p>
+							<div id="board"></div>
+						</section>
+						<section id="second" class="main special" style="padding-top:10px; padding-bottom:10px">
+							<button type="button" class="btn btn-primary btn-lg btn-block" onclick="newGame()">Clear Board</button>
+							<div class="dropdown">
+							  <button class="dropbtn btn btn-primary btn-lg btn-block" onclick="dropdownClick()">Difficulty</button>
+							  <div id="myDropdown" class="dropdown-content">
+							    <a id="beginner">Beginner</a>
+							    <a id="intermediate">Intermediate</a>
+							    <a id="expert">Expert</a>
+							  </div>
+							</div>
+						</section>
+					</div>
+					<div id="loader"></div>
+			</div>
+	</body>
+	<script src="utils.js"></script>
+	<script src="judge.js"></script>
+	<script src="game.js"></script>
+	<script>
+	/** Globals */
+	var player;
+	var winner;
+	var difficulty;
+	var nodes = [];
+	var judge;
+	var isTieGame;
+	var choice;
+
+	/*
+	 * Initializes the state of the game.
+	 */
+	initializeBoard();
+	initializeGlobals();
+	initializeButtons();
+
+	/*
+	 * Initializes the global member variables for a game of TicTacToe.
+	 */
+	function initializeGlobals() {
+	  hideLoader();
+	  isTieGame = false;
+	  difficulty = null;
+	  winner = null;
+	  player = Player.RED;
+	  var rows = Array.apply(null, new Array(9)).map(Number.prototype.valueOf,0);
+	  var cols = Array.apply(null, new Array(9)).map(Number.prototype.valueOf,0);
+	  var diagonal = 0;
+	  var antiDiagonal = 0;
+	  judge = new Judge(rows, cols, diagonal, antiDiagonal);
+	  $("results").innerHTML = "Please select a difficulty.";
+	}
+
+	/*
+	 * Initializes the board.
+	 */
+	function initializeBoard() {
+	  var cell = 0;
+	  for (var i = 0; i < 3; i++) {
+	    for (var j = 0; j < 3; j++) {
+	      var node = document.createElement("div");
+	      node.id = cell++;
+	      node.className = "cell";
+	      if (j == 0) {
+	        node.style.clear = "both";
+	      }
+
+	      nodes.push(node);
+	      node.onclick = function() {
+	        if (difficulty == null) {
+	          return;
+	        }
+	        if (isGameOver()) {
+	          return;
+	        }
+	        makeMove(this);
+	      }
+	      $("board").appendChild(node);
+	    }
+	  }
+	}
+
+	/*
+	 * Initializes the difficulty buttons.
+	 */
+	function initializeButtons() {
+	  $("beginner").onclick = function() {
+	    if (isGameOver()) {
+	      return;
+	    }
+	    difficulty = Difficulty.BEGINNER;
+	    $("results").innerHTML = difficulty + ".";
+	  }
+	  $("intermediate").onclick = function() {
+	    if (isGameOver()) {
+	      return;
+	    }
+	    difficulty = Difficulty.INTERMEDIATE;
+	    $("results").innerHTML = difficulty + ".";
+
+	  }
+	  $("expert").onclick = function() {
+	    if (isGameOver()) {
+	      return;
+	    }
+	    difficulty = Difficulty.EXPERT;
+	    $("results").innerHTML = difficulty + ".";
+	  }
+	}
+	</script>
+</html>
