@@ -58,7 +58,7 @@ function opponentMakeMove() {
     finishMove();
   } else {
     showLoader();
-    setTimeout(doOptimalMove, 10);
+    setTimeout(doOptimalMove, 100);
   }
 }
 
@@ -66,14 +66,20 @@ function opponentMakeMove() {
  * Makes the optimal move for the AI.
  */
 function doOptimalMove() {
-  minimax(player, nodes, 0);
-  finishMove();
+  var serialized = getSerialized(nodes);
+  if (serialized in cache) {
+    choice = cache[serialized];
+  } else {
+    minimax(player, nodes, 0);
+    cache[serialized] = choice;
+  }
+  finishMove(serialized);
 }
 
 /* 
  * Finishes the AI's move.
  */
-function finishMove() {
+function finishMove(serialized) {
   choice.style.background = "blue";
   winner = judge.updateBoard(choice, player);
   hideLoader();  

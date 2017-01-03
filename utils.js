@@ -16,10 +16,27 @@ window.onclick = function(event) {
 
 /* 
  * When the user clicks on the button, toggle
- * between hiding and showing the dropdown content .
+ * between hiding and showing the dropdown content.
  */
 function dropdownClick() {
   $("myDropdown").classList.toggle("show");
+}
+
+/*
+ * Gets a serialized version of the passed in board.
+ */
+function getSerialized(nodes) {
+  var serialized = "";
+  nodes.forEach(function(node) {
+    if (isBlank(node)) {
+      serialized += "#";
+    } else if (node.style.background == "red") {
+      serialized += "R";
+    } else {
+      serialized += "B";
+    }
+  });
+  return serialized;  
 }
 
 /*
